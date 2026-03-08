@@ -39,6 +39,18 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>grading-system</finalName>
+    <finalName>manomeNote</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>11.0.15</version>
+        <configuration>
+            <webApp>
+                <contextPath>/</contextPath>
+            </webApp>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>
