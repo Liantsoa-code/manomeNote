@@ -36,4 +36,11 @@ public class GradingService {
                 return notes.stream().mapToDouble(v -> v).average().orElse(0);
         }
     }
+
+    public boolean validerNotes(List<Double> notes) {
+        for (double n : notes) {
+            if (n < 0 || n > 20) return false;
+        }
+        return !notes.isEmpty();
+    }
 }
