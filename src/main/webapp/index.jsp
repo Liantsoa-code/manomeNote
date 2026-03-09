@@ -112,6 +112,17 @@
     </head>
 
     <body>
+        <div
+            style="text-align: center; padding: 20px; background: #fff; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+            <a href="index.jsp"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Accueil</a>
+            <a href="etudiants"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Étudiants</a>
+            <a href="professeurs"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Professeurs</a>
+            <a href="matieres"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Matières</a>
+        </div>
         <div class="container">
             <h1>manomeNote</h1>
             <p class="subtitle">Système Intégré de Notation Candidat</p>
