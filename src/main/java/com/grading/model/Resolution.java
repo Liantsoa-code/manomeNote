@@ -1,13 +1,13 @@
 package com.grading.model;
 
-public class Matiere {
+public class Resolution {
     private int id;
     private String libelle;
 
-    public Matiere() {
+    public Resolution() {
     }
 
-    public Matiere(int id, String libelle) {
+    public Resolution(int id, String libelle) {
         this.id = id;
         this.libelle = libelle;
     }
