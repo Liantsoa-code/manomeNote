@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Gestion des Matières</title>
+            <title>ETU3623 | Récapitulatif des Notes Finales</title>
             <style>
                 body {
                     font-family: 'Segoe UI', Arial, sans-serif;
@@ -15,7 +15,7 @@
                 }
 
                 .container {
-                    max-width: 800px;
+                    max-width: 1000px;
                     margin: auto;
                     background: white;
                     padding: 30px;
@@ -31,6 +31,10 @@
                 .nav {
                     margin-bottom: 20px;
                     text-align: center;
+                    background: white;
+                    padding: 15px;
+                    border-radius: 8px;
+                    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
                 }
 
                 .nav a {
@@ -48,27 +52,44 @@
 
                 th,
                 td {
-                    padding: 12px;
+                    padding: 15px;
                     border-bottom: 1px solid #ddd;
                     text-align: left;
                 }
 
-                .btn {
-                    padding: 8px 12px;
-                    border-radius: 4px;
-                    text-decoration: none;
-                    font-size: 14px;
-                    cursor: pointer;
-                    border: none;
-                    color: white;
+                th {
+                    background-color: #f8f9fa;
+                    color: #5f6368;
+                    font-weight: 600;
                 }
 
-                .btn-add {
-                    background-color: #1a73e8;
+                .final-note {
+                    color: #188038;
+                    font-weight: bold;
+                    font-size: 1.2em;
                 }
 
-                .btn-delete {
-                    background-color: #d93025;
+                .badge {
+                    padding: 5px 10px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: bold;
+                    text-transform: capitalize;
+                }
+
+                .badge-moyenne {
+                    background: #e8f0fe;
+                    color: #1a73e8;
+                }
+
+                .badge-grand {
+                    background: #e6f4ea;
+                    color: #188038;
+                }
+
+                .badge-petit {
+                    background: #fef7e0;
+                    color: #f29900;
                 }
             </style>
         </head>
@@ -86,28 +107,39 @@
                 <a href="parametres">Paramètres</a>
                 <a href="resultats">Résultats</a>
             </div>
+
             <div class="container">
-                <h1>Gestion des Matières</h1>
-                <form action="matieres" method="post" style="margin-bottom: 20px;">
-                    <input type="text" name="libelle" placeholder="Libellé de la matière" required
-                        style="padding: 10px; width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-                    <button type="submit" class="btn btn-add">Ajouter</button>
-                </form>
+                <h1>Tableau de Bord des Résultats</h1>
+
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Candidat</th>
                             <th>Matière</th>
-                            <th>Action</th>
+                            <th>Écart (SAD)</th>
+                            <th>Correction</th>
+                            <th>Décision</th>
+                            <th>Note Finale</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="m" items="${matieres}">
+                        <c:forEach var="r" items="${results}">
                             <tr>
-                                <td>${m.id}</td>
-                                <td>${m.libelle}</td>
-                                <td><a href="matieres?action=delete&id=${m.id}" class="btn btn-delete">Supprimer</a>
+                                <td><strong>${r.candidatNom}</strong></td>
+                                <td>${r.matiereNom}</td>
+                                <td style="color: #666;">${r.sad}</td>
+                                <td style="font-size: 0.9em; color: #888;">${r.nbProfs} correcteurs</td>
+                                <td>
+                                    <c:set var="bClass" value="badge-moyenne" />
+                                    <c:if test="${r.resolution == 'Grand'}">
+                                        <c:set var="bClass" value="badge-grand" />
+                                    </c:if>
+                                    <c:if test="${r.resolution == 'Petit'}">
+                                        <c:set var="bClass" value="badge-petit" />
+                                    </c:if>
+                                    <span class="badge ${bClass}">${r.resolution}</span>
                                 </td>
+                                <td class="final-note">${r.noteFinale}/20</td>
                             </tr>
                         </c:forEach>
                     </tbody>

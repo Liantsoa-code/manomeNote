@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Gestion des Matières</title>
+            <title>Saisie des Notes</title>
             <style>
                 body {
                     font-family: 'Segoe UI', Arial, sans-serif;
@@ -15,7 +15,7 @@
                 }
 
                 .container {
-                    max-width: 800px;
+                    max-width: 900px;
                     margin: auto;
                     background: white;
                     padding: 30px;
@@ -40,6 +40,23 @@
                     font-weight: bold;
                 }
 
+                select,
+                input {
+                    padding: 10px;
+                    margin: 5px;
+                    border-radius: 4px;
+                    border: 1px solid #ddd;
+                }
+
+                .btn {
+                    padding: 10px 20px;
+                    background: #1a73e8;
+                    color: white;
+                    border: none;
+                    border-radius: 4px;
+                    cursor: pointer;
+                }
+
                 table {
                     width: 100%;
                     border-collapse: collapse;
@@ -51,24 +68,6 @@
                     padding: 12px;
                     border-bottom: 1px solid #ddd;
                     text-align: left;
-                }
-
-                .btn {
-                    padding: 8px 12px;
-                    border-radius: 4px;
-                    text-decoration: none;
-                    font-size: 14px;
-                    cursor: pointer;
-                    border: none;
-                    color: white;
-                }
-
-                .btn-add {
-                    background-color: #1a73e8;
-                }
-
-                .btn-delete {
-                    background-color: #d93025;
                 }
             </style>
         </head>
@@ -87,26 +86,48 @@
                 <a href="resultats">Résultats</a>
             </div>
             <div class="container">
-                <h1>Gestion des Matières</h1>
-                <form action="matieres" method="post" style="margin-bottom: 20px;">
-                    <input type="text" name="libelle" placeholder="Libellé de la matière" required
-                        style="padding: 10px; width: 250px; border: 1px solid #ddd; border-radius: 4px;">
-                    <button type="submit" class="btn btn-add">Ajouter</button>
+                <h1>Saisie des Notes</h1>
+                <form action="gestion-notes" method="post"
+                    style="background:#f8f9fa; padding:20px; border-radius:8px; margin-bottom:20px;">
+                    <select name="candidatId" required>
+                        <option value="">Candidat</option>
+                        <c:forEach var="c" items="${candidats}">
+                            <option value="${c.id}">${c.nom}</option>
+                        </c:forEach>
+                    </select>
+                    <select name="correcteurId" required>
+                        <option value="">Correcteur</option>
+                        <c:forEach var="c" items="${correcteurs}">
+                            <option value="${c.id}">${c.nom}</option>
+                        </c:forEach>
+                    </select>
+                    <select name="matiereId" required>
+                        <option value="">Matière</option>
+                        <c:forEach var="m" items="${matieres}">
+                            <option value="${m.id}">${m.libelle}</option>
+                        </c:forEach>
+                    </select>
+                    <input type="number" name="valeur" step="0.01" placeholder="Note /20" required>
+                    <button type="submit" class="btn">Enregistrer</button>
                 </form>
                 <table>
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th>Candidat</th>
+                            <th>Correcteur</th>
                             <th>Matière</th>
+                            <th>Note</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="m" items="${matieres}">
+                        <c:forEach var="n" items="${notes}">
                             <tr>
-                                <td>${m.id}</td>
-                                <td>${m.libelle}</td>
-                                <td><a href="matieres?action=delete&id=${m.id}" class="btn btn-delete">Supprimer</a>
+                                <td>${n.etudiantNom}</td>
+                                <td>${n.professeurNom}</td>
+                                <td>${n.matiereNom}</td>
+                                <td>${n.valeur}/20</td>
+                                <td><a href="gestion-notes?action=delete&id=${n.id}" style="color:red;">Supprimer</a>
                                 </td>
                             </tr>
                         </c:forEach>

@@ -113,30 +113,39 @@
 
     <body>
         <div
+            style="font-size: 32px; font-weight: 900; color: #1a73e8; text-align: center; padding: 20px 0; background: #fff; letter-spacing: 2px;">
+            ETU3623</div>
+        <div
             style="text-align: center; padding: 20px; background: #fff; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
             <a href="index.jsp"
                 style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Accueil</a>
-            <a href="etudiants"
-                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Étudiants</a>
-            <a href="professeurs"
-                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Professeurs</a>
+            <a href="candidats"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Candidats</a>
+            <a href="correcteurs"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Correcteurs</a>
             <a href="matieres"
                 style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Matières</a>
+            <a href="gestion-notes"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Notes</a>
+            <a href="parametres"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Paramètres</a>
+            <a href="resultats"
+                style="margin: 0 15px; text-decoration: none; color: #1a73e8; font-weight: bold;">Résultats</a>
         </div>
         <div class="container">
             <h1>manomeNote</h1>
-            <p class="subtitle">Système Intégré de Notation Candidat</p>
+            <p class="subtitle">Calculateur de Note Finale (Optimisé)</p>
 
             <form action="calculer" method="post">
                 <div class="input-group">
-                    <label for="idCandidat">Numéro Candidat</label>
-                    <input type="text" id="idCandidat" name="idCandidat" placeholder="Ex: CAN-2024-001" required>
+                    <label for="idCandidat">ID Candidat</label>
+                    <input type="number" id="idCandidat" name="idCandidat" placeholder="Ex: 1" required>
                 </div>
                 <div class="input-group">
-                    <label for="idMatiere">Code Matière</label>
-                    <input type="text" id="idMatiere" name="idMatiere" placeholder="Ex: MATH-01" required>
+                    <label for="idMatiere">ID Matière</label>
+                    <input type="number" id="idMatiere" name="idMatiere" placeholder="Ex: 1" required>
                 </div>
-                <button type="submit">Calculer la Note</button>
+                <button type="submit">Lancer le Calcul</button>
             </form>
 
             <% if(request.getAttribute("erreur") !=null) { %>

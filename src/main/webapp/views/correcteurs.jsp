@@ -5,7 +5,7 @@
 
         <head>
             <meta charset="UTF-8">
-            <title>Gestion des Matières</title>
+            <title>Gestion des Correcteurs</title>
             <style>
                 body {
                     font-family: 'Segoe UI', Arial, sans-serif;
@@ -87,9 +87,9 @@
                 <a href="resultats">Résultats</a>
             </div>
             <div class="container">
-                <h1>Gestion des Matières</h1>
-                <form action="matieres" method="post" style="margin-bottom: 20px;">
-                    <input type="text" name="libelle" placeholder="Libellé de la matière" required
+                <h1>Gestion des Correcteurs</h1>
+                <form action="correcteurs" method="post" style="margin-bottom: 20px;">
+                    <input type="text" name="nom" placeholder="Nom du correcteur" required
                         style="padding: 10px; width: 250px; border: 1px solid #ddd; border-radius: 4px;">
                     <button type="submit" class="btn btn-add">Ajouter</button>
                 </form>
@@ -97,16 +97,16 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Matière</th>
+                            <th>Nom</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <c:forEach var="m" items="${matieres}">
+                        <c:forEach var="c" items="${correcteurs}">
                             <tr>
-                                <td>${m.id}</td>
-                                <td>${m.libelle}</td>
-                                <td><a href="matieres?action=delete&id=${m.id}" class="btn btn-delete">Supprimer</a>
+                                <td>${c.id}</td>
+                                <td>${c.nom}</td>
+                                <td><a href="correcteurs?action=delete&id=${c.id}" class="btn btn-delete">Supprimer</a>
                                 </td>
                             </tr>
                         </c:forEach>
