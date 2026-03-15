@@ -45,23 +45,52 @@ public class ParametreDAO {
     }
 
     public String getResolutionAppropriee(int matiereId, double sadCalculée) {
-        String sql = "SELECT r.libelle FROM parametre p " +
+        String sql = "SELECT r.libelle, p.valeur_limite FROM parametre p " +
                 "JOIN resolution r ON p.resolution_id = r.id " +
                 "JOIN operation o ON p.operation_id = o.id " +
                 "WHERE p.matiere_id = ? " +
                 "AND ((o.signe = '<' AND ? < p.valeur_limite) OR " +
                 "     (o.signe = '<=' AND ? <= p.valeur_limite) OR " +
                 "     (o.signe = '>' AND ? > p.valeur_limite) OR " +
-                "     (o.signe = '>=' AND ? >= p.valeur_limite)) " +
-                "LIMIT 1";
+                "     (o.signe = '>=' AND ? >= p.valeur_limite))";
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, matiereId);
             for (int i = 2; i <= 5; i++)
                 stmt.setDouble(i, sadCalculée);
             try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next())
-                    return rs.getString("libelle");
+                List<String> resolutions = new ArrayList<>();
+                List<Double> limites = new ArrayList<>();
+                
+                while (rs.next()) {
+                    resolutions.add(rs.getString("libelle"));
+                    limites.add(rs.getDouble("valeur_limite"));
+                }
+                
+                if (resolutions.isEmpty()) {
+                    return "Moyenne";
+                }
+                if (resolutions.size() == 1) {
+                    return resolutions.get(0);
+                }
+                
+                // Lorsque la moyenne est dans les deux conditions d'opération
+                int bestIndex = 0;
+                double minEcart = Math.abs(sadCalculée - limites.get(0));
+                
+                for (int i = 1; i < resolutions.size(); i++) {
+                    double ecart = Math.abs(sadCalculée - limites.get(i));
+                    if (ecart < minEcart) {
+                        minEcart = ecart;
+                        bestIndex = i;
+                    } else if (ecart == minEcart) {
+                        // Si l'ecart est egal pour les deux, on prends la condition avec le seuil le plus petit
+                        if (limites.get(i) < limites.get(bestIndex)) {
+                            bestIndex = i;
+                        }
+                    }
+                }
+                return resolutions.get(bestIndex);
             }
         } catch (SQLException e) {
             e.printStackTrace();
