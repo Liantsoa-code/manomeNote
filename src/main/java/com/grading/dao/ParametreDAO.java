@@ -45,52 +45,74 @@ public class ParametreDAO {
     }
 
     public String getResolutionAppropriee(int matiereId, double sadCalculée) {
-        String sql = "SELECT r.libelle, p.valeur_limite FROM parametre p " +
+        String sql = "SELECT p.valeur_limite, r.libelle, o.signe FROM parametre p " +
                 "JOIN resolution r ON p.resolution_id = r.id " +
                 "JOIN operation o ON p.operation_id = o.id " +
-                "WHERE p.matiere_id = ? " +
-                "AND ((o.signe = '<' AND ? < p.valeur_limite) OR " +
-                "     (o.signe = '<=' AND ? <= p.valeur_limite) OR " +
-                "     (o.signe = '>' AND ? > p.valeur_limite) OR " +
-                "     (o.signe = '>=' AND ? >= p.valeur_limite))";
+                "WHERE p.matiere_id = ?";
+                
         try (Connection conn = DatabaseConnection.getConnection();
                 PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, matiereId);
-            for (int i = 2; i <= 5; i++)
-                stmt.setDouble(i, sadCalculée);
+            
             try (ResultSet rs = stmt.executeQuery()) {
-                List<String> resolutions = new ArrayList<>();
-                List<Double> limites = new ArrayList<>();
+                List<String> validResolutions = new ArrayList<>();
+                List<Double> validLimites = new ArrayList<>();
+                
+                List<String> allResolutions = new ArrayList<>();
+                List<Double> allLimites = new ArrayList<>();
                 
                 while (rs.next()) {
-                    resolutions.add(rs.getString("libelle"));
-                    limites.add(rs.getDouble("valeur_limite"));
+                    double limite = rs.getDouble("valeur_limite");
+                    String resolution = rs.getString("libelle");
+                    String signe = rs.getString("signe");
+                    
+                    allResolutions.add(resolution);
+                    allLimites.add(limite);
+                    
+                    boolean conditionMet = false;
+                    switch(signe) {
+                        case "<": conditionMet = sadCalculée < limite; break;
+                        case "<=": conditionMet = sadCalculée <= limite; break;
+                        case ">": conditionMet = sadCalculée > limite; break;
+                        case ">=": conditionMet = sadCalculée >= limite; break;
+                        case "=": conditionMet = sadCalculée == limite; break;
+                    }
+                    if (conditionMet) {
+                        validResolutions.add(resolution);
+                        validLimites.add(limite);
+                    }
                 }
                 
-                if (resolutions.isEmpty()) {
+                // Si aucune règle n'est configurée pour la matière
+                if (allResolutions.isEmpty()) {
                     return "Moyenne";
                 }
-                if (resolutions.size() == 1) {
-                    return resolutions.get(0);
+                
+                // S'il y a des conditions qui correspondent exactement, on les compare, 
+                // sinon on compare avec toutes les conditions pour trouver le seuil le plus proche
+                List<String> resToCompare = validResolutions.isEmpty() ? allResolutions : validResolutions;
+                List<Double> limToCompare = validLimites.isEmpty() ? allLimites : validLimites;
+                
+                if (resToCompare.size() == 1) {
+                    return resToCompare.get(0);
                 }
                 
-                // Lorsque la moyenne est dans les deux conditions d'opération
                 int bestIndex = 0;
-                double minEcart = Math.abs(sadCalculée - limites.get(0));
+                double minEcart = Math.abs(sadCalculée - limToCompare.get(0));
                 
-                for (int i = 1; i < resolutions.size(); i++) {
-                    double ecart = Math.abs(sadCalculée - limites.get(i));
+                for (int i = 1; i < resToCompare.size(); i++) {
+                    double ecart = Math.abs(sadCalculée - limToCompare.get(i));
                     if (ecart < minEcart) {
                         minEcart = ecart;
                         bestIndex = i;
                     } else if (ecart == minEcart) {
-                        // Si l'ecart est egal pour les deux, on prends la condition avec le seuil le plus petit
-                        if (limites.get(i) < limites.get(bestIndex)) {
+                        // Si l'écart est égal pour les deux, on prend la condition avec le seuil le plus petit
+                        if (limToCompare.get(i) < limToCompare.get(bestIndex)) {
                             bestIndex = i;
                         }
                     }
                 }
-                return resolutions.get(bestIndex);
+                return resToCompare.get(bestIndex);
             }
         } catch (SQLException e) {
             e.printStackTrace();
