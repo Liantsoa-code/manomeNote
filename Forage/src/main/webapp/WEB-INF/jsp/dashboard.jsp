@@ -17,10 +17,12 @@
     <div class="container">
         <header>
             <div>
-                <h1>Système Forage (JSP)</h1>
+                <h1>Système Forage</h1>
                 <p style="color: #666">Gestion des projets et suivi des demandes</p>
             </div>
-            <div class="badge">Session : Sprint 3</div>
+            <div
+                style="font-size: 32px; font-weight: 900; color: #1a73e8; text-align: center; padding: 20px 0; background: #fff; letter-spacing: 2px;">
+                ETU3623</div>
         </header>
 
         <div class="grid-layout">
@@ -112,6 +114,7 @@
                                 <th>Date</th>
                                 <th>Client</th>
                                 <th>Localisation</th>
+                                <th>Statut</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -125,6 +128,11 @@
                                     <td>
                                         <span>${demande.lieu}</span><br>
                                         <small style="color: #666;">${demande.district}</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge" style="background-color: #e3f2fd; color: #1976d2; border: 1px solid #bbdefb;">
+                                            ${statuses[demande.id]}
+                                        </span>
                                     </td>
                                     <td class="action-btns">
                                         <form action="${pageContext.request.contextPath}/demande/delete/${demande.id}" method="POST" onsubmit="return confirm('Confirmer la suppression ?');">

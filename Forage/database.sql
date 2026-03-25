@@ -53,3 +53,17 @@ CREATE TABLE travauxstatut (
     status_id INTEGER REFERENCES status(id),
     date_changement TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+CREATE TABLE demandestatut (
+    id SERIAL PRIMARY KEY,
+    demande_id INTEGER REFERENCES demande(id),
+    status_id INTEGER REFERENCES status(id),
+    date_statut TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+INSERT INTO status (libelle) VALUES ('Créée');
+INSERT INTO status (libelle) VALUES ('En attente');
+INSERT INTO status (libelle) VALUES ('Approuvée');
+INSERT INTO status (libelle) VALUES ('Rejetée');
+INSERT INTO status (libelle) VALUES ('En cours');
+INSERT INTO status (libelle) VALUES ('Terminée');
