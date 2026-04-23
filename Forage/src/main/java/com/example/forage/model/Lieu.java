@@ -4,25 +4,23 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "demandestatut")
+@Table(name = "lieu")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DemandeStatut {
+public class Lieu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne
-    @JoinColumn(name = "demande_id")
-    private Demande demande;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_district")
+    private District district;
     
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
+    private String adresse;
     
-    private LocalDateTime dateStatut;
+    @Column(name = "nom_lieu")
+    private String nomLieu;
 }
