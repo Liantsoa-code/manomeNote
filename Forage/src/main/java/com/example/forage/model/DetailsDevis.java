@@ -4,25 +4,25 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "demandestatut")
+@Table(name = "detail_devis")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class DemandeStatut {
+public class DetailsDevis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @ManyToOne
-    @JoinColumn(name = "demande_id")
-    private Demande demande;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_devis")
+    private Devis devis;
     
-    @ManyToOne
-    @JoinColumn(name = "status_id")
-    private Status status;
+    private String libelle;
     
-    private LocalDateTime dateStatut;
+    @Column(name = "prix_unitaire")
+    private Double prixUnitaire;
+    
+    private Double quantite;
 }

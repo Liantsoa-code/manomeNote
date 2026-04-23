@@ -4,30 +4,29 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import lombok.ToString;
-import lombok.EqualsAndHashCode;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "demande")
+@Table(name = "devis")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Demande {
+public class Devis {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "date_demande")
-    private LocalDate dateDemande;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_demande")
+    private Demande demande;
     
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_client")
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    private Client client;
+    @JoinColumn(name = "id_type_devis")
+    private TypeDevis typeDevis;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_lieu")
-    private Lieu lieu;
+    @Column(name = "date_devis")
+    private LocalDate dateDevis;
+
+    @Transient
+    private Double montantCalculé;
 }

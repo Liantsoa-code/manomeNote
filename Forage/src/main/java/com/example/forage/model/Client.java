@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import java.util.List;
 
 @Entity
+@Table(name = "client")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +20,7 @@ public class Client {
     private Long id;
     
     private String nom;
-    private String contact;
+    private String telephone;
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @ToString.Exclude
